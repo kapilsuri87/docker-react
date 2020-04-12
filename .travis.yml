@@ -1,9 +1,36 @@
+#By default we require super user permission to run on Travis CIS
 sudo: required
+#We also need Docker to be pre-installed on Travis
 services:
   - docker
 
+#This is to create a build and run the test before actually deployin it
 before_install:
   - docker build -t kapilsuri2905/docker-react -f Dockerfile.dev .
 
+#The below code runs the test scripts. Remeber '-e CI=true' is defined to clos the 
+#test running code one execution is complete
 script:
   - docker run -e CI=true kapilsuri2905/docker-react npm run test
+
+# #The below code is mainly for AWS deployment
+# deploy:
+#   #Provider is the AWS service being used to deploy
+#   provider: elasticbeanstalk
+#   #Region is defined in the AWS URL
+#   region: "region defined in aws url"
+#   #app is the application being built
+#   app: "docker-react"
+#   #Enviroment is the name of the envt being used in the service
+#   env: "AWS environment"
+#   #Bucketname is the storage where the files will be copied. Usually it is the service being used like BWS in combination of the region
+#   bucket_name: "elasticbeanstalk-region-name"
+#   #Build path is  the app-name for the first build
+#   bucket_path: "app-name"
+#   #The 'on' keyword defines the branh we need to monitor for deployment. In this case it is master
+#   on:
+#     branch: master
+#   #These AWS api credentials are defined in the environmental variables of Travis CI hence are defined with '$' symbol to define them as variables 
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key:
+#     secure: "$AWS_SECRETKEY"

@@ -16,5 +16,6 @@ RUN npm run build
 #Run Phase
 # Use Nginx docker image as a base
 FROM nginx:alpine as runner
+EXPOSE 80
 
 COPY --from=builder /app/build /usr/share/nginx/html
