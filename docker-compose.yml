@@ -1,0 +1,45 @@
+version: '3'
+version: '3'
+# Define services/ containers
+services: 
+  # Here 'web' is the application name
+  web: 
+    stdin_open: true
+    # To define the folder from where the code needs to be built
+    build:
+      # Context defines the root directory 
+      context: .
+      # Docker file define the name of the docker file if not the default one
+      dockerfile: Dockerfile.dev
+    # Port forwarding properties are define below
+    ports:
+      #can define multiple ports therefor the '-'
+      #convention
+        #<local system port number> : <container port number>
+      - "3000:3000"
+    volumes:
+      # To define volumes i.e. folder refernce from local file system to container file system
+      #convention
+        #<local file system> : <container file system>
+      # if foldders to be excluded for being overwritten then use below convention
+        # <container file system>
+      - /app/node_modules
+      - .:/app
+  tests: 
+    stdin_open: true
+    # To define the folder from where the code needs to be built
+    build:
+      # Context defines the root directory 
+      context: .
+      # Docker file define the name of the docker file if not the default one
+      dockerfile: Dockerfile.dev
+    volumes:
+      # To define volumes i.e. folder refernce from local file system to container file system
+      #convention
+        #<local file system> : <container file system>
+      # if foldders to be excluded for being overwritten then use below convention
+        # <container file system>
+      - /app/node_modules
+      - .:/app
+      #To override the existing startup command defined in the dockerfile use the command keyword as below
+    command: ["npm","run","test"]
